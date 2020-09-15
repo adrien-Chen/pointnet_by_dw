@@ -34,25 +34,4 @@ python train_net.py --task seg --dataset <dataset path> --nepoch <number epochs>
 
 
 
-## Testing
-
-
-
-  ## Evaluation
-
-Classification：
-
-- On ModelNet40
-
-|                                              | Overall Acc |
-| :------------------------------------------: | :---------: |
-|           Original implementation            |             |
-| this implementation（w/o feature transform） |             |
-| this implementation（w/ feature transfoem）  |             |
-
-- On ShapeNet：
-
-
-
-Segmentation：
 
