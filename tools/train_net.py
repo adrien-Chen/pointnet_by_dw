@@ -3,6 +3,7 @@ import argparse
 import os
 import random
 from tqdm import tqdm
+from datetime import datetime
 
 import torch
 import torch.nn.parallel
@@ -30,8 +31,10 @@ parse.add_argument('--dataset_type', type=str, default='modelnet40', help='type 
 parse.add_argument('--feature_transform', action='store_true', help='use feature transform')  # true of false
 parse.add_argument('--class_choice', type=str, default='Chair', help='class choice for segmentation at one time')
 
-# if try to use shapenet for training, u should set the '--task' for the model
+# if try to use shapenet for training, u should first set the '--task' for the model
 parse.add_argument('--task', type=str, default='cls', help='the task of the model')
+# add logs:
+parse.add_argument('--log_dir', type=str, default='eval_logs', help='the dir of log')
 # show parse:
 opt = parse.parse_args()
 print(opt)
@@ -46,7 +49,6 @@ random.seed(opt.manualSeed)
 torch.manual_seed(opt.manualSeed)
 
 # check dataset type:
-# TODO: [2020.9.5] add new dataset for training
 if opt.dataset_type == 'modelnet40':  # data_augmentation default is True!
     dataset = ModelNetDataset(
         root_dir=opt.dataset,
@@ -107,8 +109,11 @@ test_dataloader = torch.utils.data.DataLoader(
     num_workers=int(opt.workers))
 
 print(len(dataset), len(test_dataset))  # should be 9843, 2468 or 2658, 704 for ShapeNet
-# num_classes = len(dataset.classes)  # ModelNet40
-num_classes = dataset.num_seg_classes  # for ShapeNet
+if opt.dataset_type == 'shapenet':
+    num_classes = dataset.num_seg_classes  # for ShapeNet
+else:
+    num_classes = len(dataset.classes)  # ModelNet40
+
 print('classes', num_classes)
 
 try:
@@ -181,7 +186,7 @@ def PointNetCls():
 
         scheduler.step()
         # save checkpoint every epoch:
-        torch.save(classifier.state_dict(), '%s/cls_model_%d.pth' % (opt.outf, epoch))  # default: 'cls/cls_model_1.pth'
+        torch.save(classifier.state_dict(), '%s/cls_model_%d.pth' % (opt.outf, epoch))  # default: 'cls/cls_model_0.pth'
 
     # calculate acc on whole test dataset:
     total_correct = 0
@@ -201,7 +206,6 @@ def PointNetCls():
     print('final accuracy {}'.format(total_correct / float(total_testset)))
 
 
-# TODO: implement segmentation for pointcloud
 # only for one class at once: Using ShapeNet dataset!!!
 def PointNetSeg():
     classifier = point_net_seg(num_classes, feature_transform=opt.feature_transform)
@@ -295,6 +299,8 @@ def PointNetSeg():
 
     print('mIOU for class {}: {}'.format(opt.class_choice, np.mean(shape_ious)))
 
+train_loss = []
+test_loss = []
 
 if opt.task == 'cls':
     PointNetCls()
