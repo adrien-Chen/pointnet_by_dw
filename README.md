@@ -48,11 +48,11 @@ python eval.py --task cls --dataset <dataset path> --model <model path> --datase
 
 - On ModelNet40
 
-|                                              | Overall Acc | trained |
-| :------------------------------------------: | :---------: | ------- |
-|           Original implementation            |    89.2     |         |
-| this implementation（w/o feature transform） |    86.5     |         |
-| this implementation（w/ feature transfoem）  |             |         |
+|                                              | Overall Acc | trained                                                      |
+| :------------------------------------------: | :---------: | ------------------------------------------------------------ |
+|           Original implementation            |    89.2     |                                                              |
+| this implementation（w/o feature transform） |    86.5     | [model](https://github.com/adrien-Chen/pointnet_by_dw/blob/master/cls/cls_model_249.pth) |
+| this implementation（w/ feature transfoem）  |             |                                                              |
 
 
 
