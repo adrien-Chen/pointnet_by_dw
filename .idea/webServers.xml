@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="bbbcea46-b800-41eb-ad09-cab73f0f05b9" name="dw_pointnet" url="http://39.105.232.70">
+        <fileTransfer host="39.105.232.70" port="6000" rootFolder="/home/dw/PycharmProjects/PointNet_by_dw" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="6000" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="c33997ed-681d-4219-a026-2626ffa2ba2a" name="dw_pointnet_440" url="http://125.216.241.175">
+        <fileTransfer host="125.216.241.175" port="42422" rootFolder="/home/dw/PycharmProjects/PointNet_by_dw" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="42422" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always">
+    <serverData>
+      <paths name="dw@125.216.241.174:42422">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/dw/PycharmProjects/PointNet_by_dw" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="dw@39.105.232.70:6000">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/dw/PycharmProjects/PointNet_by_dw" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="dw_440">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/PycharmProjects/PointNet_by_dw" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="dw_pointnet">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="dw_pointnet_440">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
