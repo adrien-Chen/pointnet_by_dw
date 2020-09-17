@@ -23,7 +23,9 @@ python train_net.py --task cls --dataset <dataset path> --nepoch <number epochs>
 
 -  This is a example with feature transform：show the loss curve and the acc curve trained by 250 epochs
 
-there will be a figure latter...
+![cls_loss_2020-09-17](../../Desktop/adrien/my_notes/gitnote/imgs/loss-curve.png)
+
+![cls_acc_2020-09-17](../../Desktop/adrien/my_notes/gitnote/imgs/acc-curve.png)
 
 
 

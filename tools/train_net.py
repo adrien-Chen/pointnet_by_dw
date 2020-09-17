@@ -172,14 +172,14 @@ def PointNetCls():
             print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch,
                                                                loss.item(),
                                                                correct.item() / float(opt.batch_size)))
-            # add initial loss and acc in first epoch:
+            # add initial train loss and acc in first epoch:
             if epoch == 0 and i == 0:
                 train_loss[epoch] = loss.item()
                 train_acc[epoch] = correct.item() / float(opt.batch_size)
 
             # show acc in one batch test_data every 10 batch_size:
             if i % 10 == 0:
-                #  add loss and acc in each epoch:
+                #  add train loss and acc in each epoch:
                 if i+10 > num_batch:
                     train_loss[epoch+1] = loss.item()
                     train_acc[epoch+1] = correct.item() / float(opt.batch_size)
@@ -246,6 +246,12 @@ def PointNetSeg():
     classifier.cuda()  # model load to gpu
 
     num_batch = len(dataset) / opt.batch_size
+    # save loss and acc:
+    train_loss = {}
+    test_loss = {}
+    train_acc = {}
+    test_acc = {}
+
     for epoch in range(opt.nepoch):
         for i, data in enumerate(dataloader, 0):
             points, target = data
@@ -277,8 +283,17 @@ def PointNetSeg():
             print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch,
                                                                loss.item(),
                                                                correct.item()/float(opt.batch_size * 2500)))
+            # add initial train loss and acc in first epoch:
+            if epoch == 0 and i == 0:
+                train_loss[epoch] = loss.item()
+                train_acc[epoch] = correct.item() / float(opt.batch_size)
 
             if i%10 == 0:
+                #  add train loss and acc in each epoch:
+                if i+10 > num_batch:
+                    train_loss[epoch+1] = loss.item()
+                    train_acc[epoch+1] = correct.item() / float(opt.batch_size)
+
                 j, data = next(enumerate(test_dataloader, 0))
                 points, target = data
                 points = points.transpose(2, 1)
@@ -294,6 +309,14 @@ def PointNetSeg():
                                                                 blue('test'),
                                                                 loss.item(),
                                                                 correct.item() / float(opt.batch_size * 2500)))
+                # add initial test loss and acc in first epoch:
+                if epoch == 0 and i == 0:
+                    test_loss[epoch] = loss.item()
+                    test_acc[epoch] = correct.item() / float(opt.batch_size)
+                # add test loss and acc in each epoch:
+                if i+10 > num_batch:
+                    test_loss[epoch+1] = loss.item()
+                    test_acc[epoch+1] = correct.item() / float(opt.batch_size)
 
         scheduler.step()
         # save checkpoint every epoch:
