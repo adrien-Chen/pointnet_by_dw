@@ -2,7 +2,7 @@
 
 This repo is implementation for PointNet by Pytorch. The model can be trained by ModelNet40 or ShapeNet. You can also download the trained model for test.
 
-  # Usage:w
+  # Usage:
 
   ## Training 
 
@@ -12,7 +12,7 @@ This repo is implementation for PointNet by Pytorch. The model can be trained by
 
 ------
 
-  Classification:
+#### Classification
 
 - Can use ModelNet40 or ShapeNet do classification：
 
@@ -21,9 +21,13 @@ cd pointnet
 python train_net.py --task cls --dataset <dataset path> --nepoch <number epochs> --batch_size <batchsize> --dataset_type <modelnet40 | shapenet>
 ```
 
-  
+-  This is a example with feature transform：show the loss curve and the acc curve trained by 250 epochs
 
-Segmentation:
+there will be a figure latter...
+
+
+
+#### Segmentation
 
 - Only use ShapeNet do segmentation：
 
@@ -36,7 +40,7 @@ python train_net.py --task seg --dataset <dataset path> --nepoch <number epochs>
 
   ## Evaluation
 
-Classification：
+#### Classification
 
 ```
 python eval.py --task cls --dataset <dataset path> --model <model path> --dataset_type <modelnet40 | shapenet>
@@ -56,9 +60,9 @@ python eval.py --task cls --dataset <dataset path> --model <model path> --datase
 
 To be continuing：
 
-- On ShapeNet：
+- On ShapeNet
 
-Segmentation：
+#### Segmentation
 
 
 
