@@ -28,7 +28,7 @@ parse.add_argument('--outf', type=str, default='cls', help='output folder')
 parse.add_argument('--model', type=str, default='', help='set model path')
 parse.add_argument('--dataset', type=str, required=True, help='set dataset path')
 parse.add_argument('--dataset_type', type=str, default='modelnet40', help='type of your dataset')
-parse.add_argument('--feature_transform', action='store_true', help='use feature transform')  # true of false
+parse.add_argument('--feature_transform', action='store_true', help='use feature transform')  # True or False
 parse.add_argument('--class_choice', type=str, default='Chair', help='class choice for segmentation at one time')
 
 # if try to use shapenet for training, u should first set the '--task' for the model
@@ -121,7 +121,9 @@ try:
 except OSError:
     pass
 
+# ========================================
 # create model for training cls:
+# ========================================
 def PointNetCls():
     classifier = point_net_cls(k=num_classes, feature_transform=opt.feature_transform)  # default is False!
 
@@ -133,6 +135,11 @@ def PointNetCls():
     classifier.cuda()  # model load to gpu
 
     num_batch = len(dataset) / opt.batch_size
+    # save loss and acc:
+    train_loss = {}
+    test_loss = {}
+    train_acc = {}
+    test_acc = {}
 
     for epoch in range(opt.nepoch):
         # scheduler.step()
@@ -144,7 +151,7 @@ def PointNetCls():
             points, target = points.cuda(), target.cuda()
             optimizer.zero_grad()
             classifier = classifier.train()  # for training mode
-
+            # pred, trans, trans_feat = classifier(points)
             try:
                 pred, trans, trans_feat = classifier(points)
             except RuntimeError as exception:
@@ -155,7 +162,6 @@ def PointNetCls():
                 else:
                     raise exception
 
-            # pred, trans, trans_feat = classifier(points)
             loss = F.nll_loss(pred, target)
             if opt.feature_transform:
                 loss += feature_transform_regularizer(trans_feat) * 0.01
@@ -166,9 +172,18 @@ def PointNetCls():
             print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch,
                                                                loss.item(),
                                                                correct.item() / float(opt.batch_size)))
+            # add initial loss and acc in first epoch:
+            if epoch == 0 and i == 0:
+                train_loss[epoch] = loss.item()
+                train_acc[epoch] = correct.item() / float(opt.batch_size)
 
-            # show acc in one batch test data every 10 epoch:
+            # show acc in one batch test_data every 10 batch_size:
             if i % 10 == 0:
+                #  add loss and acc in each epoch:
+                if i+10 > num_batch:
+                    train_loss[epoch+1] = loss.item()
+                    train_acc[epoch+1] = correct.item() / float(opt.batch_size)
+
                 j, data = next(enumerate(test_dataloader, 0))
                 points, target = data
                 target = target[:, 0]
@@ -177,12 +192,21 @@ def PointNetCls():
                 classifier = classifier.eval()  # for evaluation mode
                 pred, _, _ = classifier(points)
                 loss = F.nll_loss(pred, target)
+
                 pred_cls = pred.data.max(1)[1]
                 correct = pred_cls.eq(target.data).cpu().sum()
                 print(correct.item(), opt.batch_size)
                 print('[%d: %d/%d] %s loss: %f accuracy: %f' % (epoch, i, num_batch, blue('test'),
                                                                 loss.item(),
                                                                 correct.item() / float(opt.batch_size)))
+                # add initial test loss and acc in first epoch:
+                if epoch == 0 and i == 0:
+                    test_loss[epoch] = loss.item()
+                    test_acc[epoch] = correct.item() / float(opt.batch_size)
+                # add test loss and acc in each epoch:
+                if i+10 > num_batch:
+                    test_loss[epoch+1] = loss.item()
+                    test_acc[epoch+1] = correct.item() / float(opt.batch_size)
 
         scheduler.step()
         # save checkpoint every epoch:
@@ -204,9 +228,13 @@ def PointNetCls():
         total_testset += points.size()[0]  # add batch_size
 
     print('final accuracy {}'.format(total_correct / float(total_testset)))
+    return train_loss, test_loss, train_acc, test_acc
 
 
-# only for one class at once: Using ShapeNet dataset!!!
+# ========================================
+# only for one class at once:
+#   Using ShapeNet dataset!!!
+# ========================================
 def PointNetSeg():
     classifier = point_net_seg(num_classes, feature_transform=opt.feature_transform)
 
@@ -299,11 +327,51 @@ def PointNetSeg():
 
     print('mIOU for class {}: {}'.format(opt.class_choice, np.mean(shape_ious)))
 
-train_loss = []
-test_loss = []
+
+# ====================
+# show loss curve:
+# ====================
+import matplotlib.pyplot as plt
+def show_loss(train_loss, test_loss):
+    x = train_loss.keys()  # idx of each epoch
+    x = np.asarray(list(x))
+    y_train_loss = np.asarray([train_loss[i] for i in x])
+    y_test_loss = np.asarray([test_loss[i] for i in x])
+
+    plt.plot(x, y_train_loss, 'bo-', label='train')
+    plt.plot(x, y_test_loss, 'gs-', label='test')
+    plt.legend(loc="upper left")
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.savefig('%s_loss_%s' % (opt.task, datetime.today().date()))
+    plt.show()
+
+
+# ====================
+# show acc curve:
+# ====================
+def show_acc(train_acc, test_acc):
+    x = train_acc.keys()
+    x = np.asarray(list(x))
+    y_train_acc = np.asarray([train_acc[i] for i in x])
+    y_test_acc = np.asarray([test_acc[i] for i in x])
+
+    plt.plot(x, y_train_acc, 'bo-', label='train')
+    plt.plot(x, y_test_acc, 'gs-', label='test')
+    plt.legend(loc='upper left')
+    plt.xlabel('Epoch')
+    plt.ylabel('Acc')
+    plt.savefig('%s_acc_%s' % (opt.task, datetime.today().date()))
+    plt.show()
+
 
 if opt.task == 'cls':
-    PointNetCls()
+    train_loss, test_loss, train_acc, test_acc = PointNetCls()
+    # print(train_loss.keys(), train_loss.values())
+    # print(train_acc.keys(), train_acc.values())
+    show_loss(train_loss, test_loss)
+    print(train_acc, test_acc)
+    show_acc(train_acc, test_acc)
 elif opt.task == 'seg':
     PointNetSeg()
 else:

@@ -92,7 +92,7 @@ class point_net_feature(nn.Module):
 
         if self.feature_transform:
             trans_matrix_feat = self.tn_feature(x)
-            x = x.transpose(2, 1)  # shape [B, N, 64
+            x = x.transpose(2, 1)  # shape [B, N, 64]
             x = torch.bmm(x, trans_matrix_feat)
             x = x.transpose(2, 1)  # [B, 64N]
         else:
@@ -172,7 +172,7 @@ def feature_transform_regularizer(trans):
     I = torch.eye(dims)[None, :, :]
     if trans.is_cuda:
         I = I.cuda()
-    loss = torch.mean(torch.norm(torch.bmm(trans, trans.transpose(2, 1)) - I), dim=(1, 2))
+    loss = torch.mean(torch.norm(torch.bmm(trans, trans.transpose(2, 1)) - I, dim=(1, 2)))
     return loss
 
 
