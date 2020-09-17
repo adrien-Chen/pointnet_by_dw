@@ -34,10 +34,6 @@ python train_net.py --task seg --dataset <dataset path> --nepoch <number epochs>
 
 
 
-## Testing
-
-
-
   ## Evaluation
 
 Classification：
