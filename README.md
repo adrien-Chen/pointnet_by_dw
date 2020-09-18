@@ -54,7 +54,7 @@ python eval.py --task cls --dataset <dataset path> --model <model path> --datase
 | :------------------------------------------: | :---------: | ------------------------------------------------------------ |
 |           Original implementation            |    89.2     |                                                              |
 | this implementation（w/o feature transform） |    86.5     | [model](https://github.com/adrien-Chen/pointnet_by_dw/blob/master/cls/cls_model_249.pth) |
-| this implementation（w/ feature transfoem）  |    86.9     | model                                                        |
+| this implementation（w/ feature transfoem）  |    86.9     | [model](https://github.com/adrien-Chen/pointnet_by_dw/blob/master/cls/cls_model_246.pth) |
 
 
 
