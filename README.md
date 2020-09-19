@@ -58,11 +58,15 @@ python eval.py --task cls --dataset <dataset path> --model <model path> --datase
 
 
 
-------
+- On ShapeNet
+
+|                                              | Overall Acc | trained |
+| :------------------------------------------: | :---------: | ------- |
+|           Original implementation            |     N/A     |         |
+| this implementation（w/o feature transform） |    96.9     | model   |
+| this implementation（w/ feature transfoem）  |             |         |
 
 To be continuing：
-
-- On ShapeNet
 
 #### Segmentation
 

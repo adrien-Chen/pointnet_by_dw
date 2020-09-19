@@ -80,14 +80,12 @@ elif opt.dataset_type == 'shapenet' and opt.task == 'cls':
     dataset = ShapeNetDataset(
         root=opt.dataset,
         num_points=opt.num_samples,
-        class_choice=opt.class_choice,
         classification=True
     )
 
     test_dataset = ShapeNetDataset(
         root=opt.dataset,
         num_points=opt.num_samples,
-        class_choice=opt.class_choice,
         split='test',
         data_augmentation=False,
         classification=True
@@ -109,8 +107,10 @@ test_dataloader = torch.utils.data.DataLoader(
     num_workers=int(opt.workers))
 
 print(len(dataset), len(test_dataset))  # should be 9843, 2468 or 2658, 704 for ShapeNet
-if opt.dataset_type == 'shapenet':
+if opt.dataset_type == 'shapenet' and opt.task == 'seg':
     num_classes = dataset.num_seg_classes  # for ShapeNet
+elif opt.dataset_type == 'shapenet' and opt.task == 'cls':
+    num_classes = len(dataset.classes)
 else:
     num_classes = len(dataset.classes)  # ModelNet40
 
