@@ -70,5 +70,11 @@ To be continuing：
 
 #### Segmentation
 
+|                 Class(mIOU)                  | Airplane | trained                                                      |
+| :------------------------------------------: | :------: | ------------------------------------------------------------ |
+|           Original implementation            |   83.4   |                                                              |
+| this implementation（w/o feature transform） |   77.6   | [model](https://github.com/adrien-Chen/pointnet_by_dw/tree/master/cls) |
+| this implementation（w/ feature transfoem）  |          |                                                              |
+
 
 

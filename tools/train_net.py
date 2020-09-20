@@ -286,13 +286,13 @@ def PointNetSeg():
             # add initial train loss and acc in first epoch:
             if epoch == 0 and i == 0:
                 train_loss[epoch] = loss.item()
-                train_acc[epoch] = correct.item() / float(opt.batch_size)
+                train_acc[epoch] = correct.item() / float(opt.batch_size * 2500)
 
             if i%10 == 0:
                 #  add train loss and acc in each epoch:
                 if i+10 > num_batch:
                     train_loss[epoch+1] = loss.item()
-                    train_acc[epoch+1] = correct.item() / float(opt.batch_size)
+                    train_acc[epoch+1] = correct.item() / float(opt.batch_size * 2500)
 
                 j, data = next(enumerate(test_dataloader, 0))
                 points, target = data
@@ -312,11 +312,11 @@ def PointNetSeg():
                 # add initial test loss and acc in first epoch:
                 if epoch == 0 and i == 0:
                     test_loss[epoch] = loss.item()
-                    test_acc[epoch] = correct.item() / float(opt.batch_size)
+                    test_acc[epoch] = correct.item() / float(opt.batch_size * 2500)
                 # add test loss and acc in each epoch:
                 if i+10 > num_batch:
                     test_loss[epoch+1] = loss.item()
-                    test_acc[epoch+1] = correct.item() / float(opt.batch_size)
+                    test_acc[epoch+1] = correct.item() / float(opt.batch_size * 2500)
 
         scheduler.step()
         # save checkpoint every epoch:
@@ -349,6 +349,7 @@ def PointNetSeg():
             shape_ious.append(np.mean(part_ious))
 
     print('mIOU for class {}: {}'.format(opt.class_choice, np.mean(shape_ious)))
+    return train_loss, test_loss, train_acc, test_acc
 
 
 # ====================
@@ -396,7 +397,9 @@ if opt.task == 'cls':
     print(train_acc, test_acc)
     show_acc(train_acc, test_acc)
 elif opt.task == 'seg':
-    PointNetSeg()
+    train_loss, test_loss, train_acc, test_acc = PointNetSeg()
+    show_loss(train_loss, test_loss)
+    show_acc(train_acc, test_acc)
 else:
     exit("No achieve, maybe update later...")
 

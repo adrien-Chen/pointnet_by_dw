@@ -227,10 +227,12 @@ if __name__ == '__main__':
     # print(cls_0)
 
     gen_shapenet_id(datapath2)
-    data = ShapeNetDataset(root=datapath2, class_choice=['Chair'])
+    data = ShapeNetDataset(root=datapath2, classification=True)
     print(len(data))
-    ps, seg = data[0]
-    print(ps.size(), ps.type(), seg.size(), seg.type())
+    # ps, seg = data[0]
+    ps, cls = data[0]
+    # print(ps.size(), ps.type(), seg.size(), seg.type())
+    print(ps.size(), ps.type(), cls.size(), cls.type())
 
 
 
