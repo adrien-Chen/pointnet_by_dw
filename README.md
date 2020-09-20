@@ -66,15 +66,15 @@ python eval.py --task cls --dataset <dataset path> --model <model path> --datase
 | this implementation（w/o feature transform） |    96.9     | [model](https://github.com/adrien-Chen/pointnet_by_dw/tree/master/cls) |
 | this implementation（w/ feature transfoem）  |             |                                                              |
 
-To be continuing：
+
 
 #### Segmentation
 
 |                 Class(mIOU)                  | Airplane | trained                                                      |
 | :------------------------------------------: | :------: | ------------------------------------------------------------ |
 |           Original implementation            |   83.4   |                                                              |
-| this implementation（w/o feature transform） |   77.6   | [model](https://github.com/adrien-Chen/pointnet_by_dw/tree/master/cls) |
-| this implementation（w/ feature transfoem）  |          |                                                              |
+| this implementation（w/o feature transform） |   77.6   | [model](https://github.com/adrien-Chen/pointnet_by_dw/blob/master/seg/seg_model_Airplane_59.pth) |
+| this implementation（w/ feature transfoem）  |   78.1   | [model](https://github.com/adrien-Chen/pointnet_by_dw/blob/master/seg/seg_model_Airplane_89.pth) |
 
 
 
